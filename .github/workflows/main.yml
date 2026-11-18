@@ -1,0 +1,22 @@
+name: Compilar Botany Pots (Fabric 26.3)
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x gradlew
+      - run: ./gradlew :fabric:build --stacktrace
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: botanypots-fabric-26.3
+          path: fabric/build/libs/*.jar
+          if-no-files-found: warn
